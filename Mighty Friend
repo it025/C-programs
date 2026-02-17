@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+int compare_desc(const void *a, const void *b) {
+    return (*(int *)b - *(int *)a);
+}
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int n, k;
+        scanf("%d %d", &n, &k);
+        int a[n];
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &a[i]);
+        }
+        int motu_size = (n + 1) / 2;
+        int tomu_size = n / 2;
+        int motu[motu_size];
+        int tomu[tomu_size];
+        int motu_index = 0;
+        int tomu_index = 0;
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == 0) {
+                motu[motu_index++] = a[i];
+            } else {
+                tomu[tomu_index++] = a[i];
+            }
+        }
+        qsort(tomu, tomu_size, sizeof(int), compare);
+        qsort(motu, motu_size, sizeof(int), compare_desc);
+        int swaps = (motu_size < tomu_size) ? motu_size : tomu_size;
+        for (int i = 0; i < swaps && k > 0; i++) {
+            if (tomu[i] < motu[i]) {
+                int temp = tomu[i];
+                tomu[i] = motu[i];
+                motu[i] = temp;
+                k--;
+            }
+        }
+        int motu_score = 0;
+        int tomu_score = 0;
+        motu_index = 0;
+        tomu_index = 0;
+        int a_index = 0;
+        for(int i=0; i<n; i++){
+            if(i%2 == 0){
+                motu_score += motu[motu_index++];
+            } else {
+                tomu_score += tomu[tomu_index++];
+            }
+        }
+        if (tomu_score > motu_score) {
+            printf("YES\n");
+        } else {
+            printf("NO\n");
+        }
+    }
+    return 0;
+}
